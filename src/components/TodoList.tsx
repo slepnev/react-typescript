@@ -3,11 +3,17 @@ import { ITodo } from '../interfaces';
 
 type Props = {
   todos: ITodo[]
-  onToggle(id: number): void
+  onToggle: (id: number) => void
   onRemove: (id: number) => void
 };
 
 const TodoList: React.FC<Props> = ({todos, onRemove, onToggle}) => {
+  if (todos.length === 0) {
+    return (
+      <p className="center">Пока ничего нет</p>
+    )
+  }
+
   return (
     <ul>
       {todos.map(todo => {
@@ -18,8 +24,8 @@ const TodoList: React.FC<Props> = ({todos, onRemove, onToggle}) => {
 
         return (
           <li className={classes.join(' ')} key={todo.id}>
-            <label htmlFor="">
-              <input type="checkbox" name="" id="" checked={todo.completed} onChange={onToggle.bind(null, todo.id)} />
+            <label>
+              <input type="checkbox" checked={todo.completed} onChange={onToggle.bind(null, todo.id)} />
               <span>{todo.title}</span>
               <i className="material-icons red-text" onClick={() => onRemove(todo.id)}>delete</i>
             </label>
