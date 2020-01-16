@@ -1,11 +1,17 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import { ITodo } from './interfaces';
 
+declare var confirm: (question: string) => boolean;
+
 const App: React.FunctionComponent = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('todos')
+  }, [])
 
   const addHandler = (title: string) => {
     const newTodo: ITodo = {
@@ -29,7 +35,10 @@ const App: React.FunctionComponent = () => {
   };
 
   const removeHandler = (id: number) => {
-    setTodos(prev => prev.filter(todo => todo.id !== id))
+    const shouldRemove = confirm('Вы уверены что хотите удалить?');
+    if (shouldRemove) {
+      setTodos(prev => prev.filter(todo => todo.id !== id));
+    }
   };
 
   return (
